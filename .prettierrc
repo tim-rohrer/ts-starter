@@ -1,6 +1,7 @@
 {
   "semi": false,
-  "singleQuote": true,
-  "trailingComma": "es5",
-  "arrowParens": "always"
+  "doubleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "printWidth": 80
 }

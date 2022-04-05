@@ -1,9 +1,9 @@
 # Typescript Project Generator
 
-Opinionated typescript project generator
+Opinionated typescript project generator, based on the work my Sean Nicholas (@sean-nicholas)
 
-Just run
+To use, enter the project directory you with to scaffold, then run
 
 ```sh
-npx @sean-nicholas/ts-starter
+npx @tim-rohrer/ts-starter
 ```

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import * as childProcess from 'child_process'
-import { stripIndent } from 'common-tags'
-import * as fs from 'fs'
-import { join } from 'path'
-import { promisify } from 'util'
+import * as childProcess from "child_process"
+import { stripIndent } from "common-tags"
+import * as fs from "fs"
+import { join } from "path"
+import { promisify } from "util"
 
 const writeFile = promisify(fs.writeFile)
 const readFile = promisify(fs.readFile)
@@ -14,9 +14,10 @@ const exec = promisify(childProcess.exec)
 const prettierContent = stripIndent`
   {
     "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "arrowParens": "always"
+    "doubleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 80,
   }
 `
 
@@ -35,64 +36,59 @@ const jestConfigContent = stripIndent`
 `
 
 const tsConfigContent = stripIndent`
-  {
-    "compileOnSave": false,
-    "compilerOptions": {
-      "outDir": "./dist",
-      "sourceMap": true,
-      "declaration": false,
-      "moduleResolution": "node",
-      "module": "commonjs",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "target": "es2017",
-      "typeRoots": [
-        "./node_modules/@types"
-      ]
-    }
-  }
+{
+  "extends": "tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "types": ["jest"],
+    "noEmit": true
+  },
+  "include": ["src/**/*"]
+}
 `
 
 async function run() {
-  console.log('npm init')
-  await exec('npm init --yes')
+  console.log("npm init")
+  await exec("npm init --yes")
 
-  console.log('npm install (may take a while)')
+  console.log("npm install (may take a while)")
   await exec(
-    'npm install --save-dev typescript ts-node jest ts-jest @types/node @types/jest prettier'
+    "npm install --save-dev typescript ts-node jest ts-jest @types/node @types/jest @tsconfig/node16 prettier",
   )
 
-  console.log('Creating files & folders')
+  console.log("Creating files & folders")
   await Promise.all([
-    writeFile(join(process.cwd(), '.prettierrc'), prettierContent),
-    writeFile(join(process.cwd(), '.gitignore'), gitignoreContent),
-    writeFile(join(process.cwd(), 'jest.config.js'), jestConfigContent),
-    writeFile(join(process.cwd(), 'tsconfig.json'), tsConfigContent),
-    mkdir(join(process.cwd(), 'src')).then(() =>
-      writeFile(join(process.cwd(), 'src', 'index.ts'), '')
+    writeFile(join(process.cwd(), ".prettierrc"), prettierContent),
+    writeFile(join(process.cwd(), ".gitignore"), gitignoreContent),
+    writeFile(join(process.cwd(), "jest.config.js"), jestConfigContent),
+    writeFile(join(process.cwd(), "tsconfig.json"), tsConfigContent),
+    mkdir(join(process.cwd(), "src")).then(() =>
+      writeFile(join(process.cwd(), "src", "index.ts"), ""),
     ),
   ])
 
-  console.log('Updating package.json scripts')
+  console.log("Updating package.json scripts")
   await updatingPackageJson()
 
-  console.log('Running prettier')
-  await exec('npx prettier --write .')
+  console.log("Running prettier")
+  await exec("npx prettier --write .")
 }
 
 async function updatingPackageJson() {
-  const path = join(process.cwd(), 'package.json')
+  const path = join(process.cwd(), "package.json")
   const content = await readFile(path)
   const parsed = JSON.parse(content.toString())
   const newParsed = {
     ...parsed,
-    main: 'dist/index.js',
+    main: "dist/index.js",
     scripts: {
-      start: 'node dist/index.js',
-      'start-dev': 'ts-node src/index.ts',
-      test: 'jest',
-      'test-dev': 'jest --watch',
-      build: 'tsc --project tsconfig.json',
+      start: "node dist/index.js",
+      "start-dev": "ts-node src/index.ts",
+      test: "jest",
+      "test-dev": "jest --watch",
+      build: "tsc --project tsconfig.json",
     },
   }
   const newContent = JSON.stringify(newParsed)
@@ -100,5 +96,5 @@ async function updatingPackageJson() {
 }
 
 run()
-  .catch((err) => console.log('Error', err))
-  .then(() => console.log('Done'))
+  .catch((err) => console.log("Error", err))
+  .then(() => console.log("Done"))
