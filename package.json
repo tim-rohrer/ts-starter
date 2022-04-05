@@ -1,6 +1,6 @@
 {
-  "name": "@sean-nicholas/ts-starter",
-  "version": "1.0.0",
+  "name": "@tim-rohrer/ts-starter",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "bin": "dist/index.js",
