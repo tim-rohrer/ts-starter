@@ -55,7 +55,23 @@ async function run() {
 
   console.log("npm install (may take a while)")
   await exec(
-    "npm install --save-dev typescript ts-node jest ts-jest @types/node @types/jest @tsconfig/node16 prettier",
+    "npm install --save-dev typescript \
+      ts-node \
+      jest \
+      // ts-jest \
+      @types/node \
+      @types/jest \
+      @tsconfig/node16 \
+      prettier \
+      eslint \
+      eslint-config-prettier \
+      eslint-plugin-import \
+      eslint-plugin-jest \
+      eslint-plugin-node \
+      eslint-plugin-prettier \
+      @typescript-eslint/eslint-plugin \
+      @typescript-eslint/parser \
+      eslint-plugin-import",
   )
 
   console.log("Creating files & folders")
@@ -71,6 +87,9 @@ async function run() {
 
   console.log("Updating package.json scripts")
   await updatingPackageJson()
+
+  console.log("Setting version to reflect new development")
+  await exec("npm version 0.1.0-alpha")
 
   console.log("Running prettier")
   await exec("npx prettier --write .")
