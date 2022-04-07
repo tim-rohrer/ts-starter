@@ -1,2 +1,3 @@
 node_modules
-dist
+# Appears to be required at GitHub for `npm exec` to work
+# dist
