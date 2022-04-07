@@ -88,7 +88,7 @@ async function run() {
   await updatingPackageJson()
 
   console.log("Setting version to reflect new development")
-  await exec("npm version 0.1.0-alpha --no-git-tag-version")
+  await exec("npm version --no-git-tag-version --force 0.1.0-alpha")
 
   console.log("Running prettier")
   await exec("npx prettier --write .")
