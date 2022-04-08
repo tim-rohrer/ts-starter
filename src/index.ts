@@ -37,7 +37,7 @@ const jestConfigContent = stripIndent`
 
 const tsConfigContent = stripIndent`
 {
-  "extends": "tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
     "preserveConstEnums": true,
