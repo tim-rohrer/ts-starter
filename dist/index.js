@@ -62,6 +62,7 @@ async function run() {
     await exec("npm install --save-dev typescript \
       ts-node \
       jest \
+      ts-jest \
       @types/node \
       @types/jest \
       @tsconfig/node16 \
@@ -98,13 +99,13 @@ async function updatingPackageJson() {
     const path = path_1.join(process.cwd(), "package.json");
     const content = await readFile(path);
     const parsed = JSON.parse(content.toString());
-    const newParsed = Object.assign(Object.assign({}, parsed), { main: "dist/index.js", scripts: {
+    const newParsed = Object.assign(Object.assign({}, parsed), { version: "0.1.0-alpha", main: "dist/index.js", scripts: {
             start: "node dist/index.js",
             "start-dev": "ts-node src/index.ts",
             test: "jest",
             "test-dev": "jest --watch",
             "build:clean": "rm -rf dist/*",
-            build: "npm build:clean && tsc --project tsconfig.json",
+            build: "npm run build:clean && tsc --project tsconfig.json",
         } });
     const newContent = JSON.stringify(newParsed);
     await writeFile(path, newContent);
