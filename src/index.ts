@@ -124,7 +124,7 @@ async function updatingPackageJson() {
       test: "jest",
       "test-dev": "jest --watch",
       "build:clean": "rm -rf dist/*",
-      build: "npm build:clean && tsc --project tsconfig.json",
+      build: "npm run build:clean && tsc --project tsconfig.json",
     },
   }
   const newContent = JSON.stringify(newParsed)
