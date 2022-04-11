@@ -116,6 +116,7 @@ async function updatingPackageJson() {
   const parsed = JSON.parse(content.toString())
   const newParsed = {
     ...parsed,
+    version: "0.1.0-alpha",
     main: "dist/index.js",
     scripts: {
       start: "node dist/index.js",
