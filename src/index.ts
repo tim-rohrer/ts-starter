@@ -70,6 +70,7 @@ async function run() {
     "npm install --save-dev typescript \
       ts-node \
       jest \
+      ts-jest \
       @types/node \
       @types/jest \
       @tsconfig/node16 \
