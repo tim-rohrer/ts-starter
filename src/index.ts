@@ -39,15 +39,27 @@ const tsConfigContent = stripIndent`
 {
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./",
+    "outDir": "./dist",
+    "sourceMap": true,
     "preserveConstEnums": true,
     "strictNullChecks": true,
-    "types": ["jest"],
-    "noEmit": true
+    "types": ["jest", "node"],
   },
-  "include": ["src/**/*"]
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
 `
+
+const babelrcContent = stripIndent`
+{
+  "presets": [
+    ["@babel/preset-env", {"targets": {"node": "current"}}],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread"
+  ]
+}`
 
 async function run() {
   console.log("npm init")
@@ -61,6 +73,11 @@ async function run() {
       @types/node \
       @types/jest \
       @tsconfig/node16 \
+      @babel/core \
+      @babel/plugin-proposal-class-properties \
+      @babel/plugin-proposal-object-rest-spread \
+      @babel/preset-env \
+      @babel/preset-typescript \
       prettier \
       eslint \
       eslint-config-prettier \
@@ -79,6 +96,7 @@ async function run() {
     writeFile(join(process.cwd(), ".gitignore"), gitignoreContent),
     writeFile(join(process.cwd(), "jest.config.js"), jestConfigContent),
     writeFile(join(process.cwd(), "tsconfig.json"), tsConfigContent),
+    writeFile(join(process.cwd(), ".babelrc.json"), babelrcContent),
     mkdir(join(process.cwd(), "src")).then(() =>
       writeFile(join(process.cwd(), "src", "index.ts"), ""),
     ),
@@ -103,7 +121,8 @@ async function updatingPackageJson() {
       "start-dev": "ts-node src/index.ts",
       test: "jest",
       "test-dev": "jest --watch",
-      build: "tsc --project tsconfig.json",
+      "build:clean": "rm -rf dist/*",
+      build: "npm build:clean && tsc --project tsconfig.json",
     },
   }
   const newContent = JSON.stringify(newParsed)
