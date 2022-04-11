@@ -33,17 +33,28 @@ const jestConfigContent = common_tags_1.stripIndent `
 `;
 const tsConfigContent = common_tags_1.stripIndent `
 {
-  "extends": "tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./",
+    "outDir": "./dist",
+    "sourceMap": true,
     "preserveConstEnums": true,
     "strictNullChecks": true,
-    "types": ["jest"],
-    "noEmit": true
+    "types": ["jest", "node"],
   },
-  "include": ["src/**/*"]
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
 `;
+const babelrcContent = common_tags_1.stripIndent `
+{
+  "presets": [
+    ["@babel/preset-env", {"targets": {"node": "current"}}],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread"
+  ]
+}`;
 async function run() {
     console.log("npm init");
     await exec("npm init --yes");
@@ -54,6 +65,11 @@ async function run() {
       @types/node \
       @types/jest \
       @tsconfig/node16 \
+      @babel/core \
+      @babel/plugin-proposal-class-properties \
+      @babel/plugin-proposal-object-rest-spread \
+      @babel/preset-env \
+      @babel/preset-typescript \
       prettier \
       eslint \
       eslint-config-prettier \
@@ -70,6 +86,7 @@ async function run() {
         writeFile(path_1.join(process.cwd(), ".gitignore"), gitignoreContent),
         writeFile(path_1.join(process.cwd(), "jest.config.js"), jestConfigContent),
         writeFile(path_1.join(process.cwd(), "tsconfig.json"), tsConfigContent),
+        writeFile(path_1.join(process.cwd(), ".babelrc.json"), babelrcContent),
         mkdir(path_1.join(process.cwd(), "src")).then(() => writeFile(path_1.join(process.cwd(), "src", "index.ts"), "")),
     ]);
     console.log("Updating package.json scripts");
@@ -86,7 +103,8 @@ async function updatingPackageJson() {
             "start-dev": "ts-node src/index.ts",
             test: "jest",
             "test-dev": "jest --watch",
-            build: "tsc --project tsconfig.json",
+            "build:clean": "rm -rf dist/*",
+            build: "npm build:clean && tsc --project tsconfig.json",
         } });
     const newContent = JSON.stringify(newParsed);
     await writeFile(path, newContent);
