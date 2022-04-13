@@ -55,6 +55,60 @@ const babelrcContent = common_tags_1.stripIndent `
     "@babel/proposal-object-rest-spread"
   ]
 }`;
+const eslintrcContent = common_tags_1.stripIndent `
+{
+  "root": true,
+  "env": {
+    "browser": false,
+    "es2021": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".ts"]
+      }
+    }
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "node", "prettier"],
+  "overrides": [
+    {
+      "files": "./src/*",
+      "plugins": ["jest"],
+      "extends": ["plugin:jest/recommended", "plugin:jest/style"]
+    }
+  ],
+  "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "import/extensions": 0,
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "quotes": ["error", "double"]
+  }
+}`;
+const eslintignoreContent = common_tags_1.stripIndent `
+node_modules/*
+src/tests/fixtures/*
+`;
 async function run() {
     console.log("npm init");
     await exec("npm init --yes");
@@ -88,6 +142,8 @@ async function run() {
         writeFile(path_1.join(process.cwd(), "jest.config.js"), jestConfigContent),
         writeFile(path_1.join(process.cwd(), "tsconfig.json"), tsConfigContent),
         writeFile(path_1.join(process.cwd(), ".babelrc.json"), babelrcContent),
+        writeFile(path_1.join(process.cwd(), ".eslintrc.json"), eslintrcContent),
+        writeFile(path_1.join(process.cwd(), ".eslintignore"), eslintignoreContent),
         mkdir(path_1.join(process.cwd(), "src")).then(() => writeFile(path_1.join(process.cwd(), "src", "index.ts"), "")),
     ]);
     console.log("Updating package.json scripts");
