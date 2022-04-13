@@ -61,6 +61,62 @@ const babelrcContent = stripIndent`
   ]
 }`
 
+const eslintrcContent = stripIndent`
+{
+  "root": true,
+  "env": {
+    "browser": false,
+    "es2021": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".ts"]
+      }
+    }
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "node", "prettier"],
+  "overrides": [
+    {
+      "files": "./src/*",
+      "plugins": ["jest"],
+      "extends": ["plugin:jest/recommended", "plugin:jest/style"]
+    }
+  ],
+  "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "import/extensions": 0,
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "quotes": ["error", "double"]
+  }
+}`
+
+const eslintignoreContent = stripIndent`
+node_modules/*
+src/tests/fixtures/*
+`
+
 async function run() {
   console.log("npm init")
   await exec("npm init --yes")
@@ -98,6 +154,8 @@ async function run() {
     writeFile(join(process.cwd(), "jest.config.js"), jestConfigContent),
     writeFile(join(process.cwd(), "tsconfig.json"), tsConfigContent),
     writeFile(join(process.cwd(), ".babelrc.json"), babelrcContent),
+    writeFile(join(process.cwd(), ".eslintrc.json"), eslintrcContent),
+    writeFile(join(process.cwd(), ".eslintignore"), eslintignoreContent),
     mkdir(join(process.cwd(), "src")).then(() =>
       writeFile(join(process.cwd(), "src", "index.ts"), ""),
     ),
