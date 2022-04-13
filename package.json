@@ -1,6 +1,6 @@
 {
   "name": "@tim-rohrer/ts-starter",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "",
   "main": "index.js",
   "bin": "dist/index.js",

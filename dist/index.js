@@ -41,7 +41,7 @@ const tsConfigContent = common_tags_1.stripIndent `
     "strictNullChecks": true,
     "types": ["jest", "node"],
   },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "./dist/**/*"]
 }
 `;
 const babelrcContent = common_tags_1.stripIndent `

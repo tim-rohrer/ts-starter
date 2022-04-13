@@ -45,7 +45,7 @@ const tsConfigContent = stripIndent`
     "strictNullChecks": true,
     "types": ["jest", "node"],
   },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "./dist/**/*"]
 }
 `
 
