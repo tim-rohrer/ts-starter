@@ -38,12 +38,22 @@ const jestConfigContent = stripIndent`
 const tsConfigContent = stripIndent`
 {
   "extends": "@tsconfig/node16/tsconfig.json",
+  "ts-node": {
+    "esm": true
+  },
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": true,
     "preserveConstEnums": true,
     "strictNullChecks": true,
     "types": ["jest", "node"],
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "esModuleInterop": false,
+    "allowJs": true,
+    "useUnknownInCatchVariables": true,
   },
   "exclude": ["node_modules", "**/*.spec.ts", "./dist/**/*"]
 }
