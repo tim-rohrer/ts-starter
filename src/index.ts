@@ -118,7 +118,8 @@ const eslintrcContent = stripIndent`
         "exceptAfterSingleLine": true
       }
     ],
-    "quotes": ["error", "double"]
+    "quotes": ["error", "double"],
+    "prettier/prettier": ["error"]
   }
 }`
 
