@@ -24,12 +24,23 @@ const gitignoreContent = common_tags_1.stripIndent `
   dist
 `;
 const jestConfigContent = common_tags_1.stripIndent `
-  module.exports = {
-    roots: ['<rootDir>/src'],
-    transform: {
-      '^.+\\.tsx?$': 'ts-jest',
+const config = {
+  verbose: true,
+  extensionsToTreatAsEsm: [".ts"],
+  globals: {
+    "ts-jest": {
+      useESM: true,
     },
-  }
+  },
+  moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1",
+  },
+  preset: "ts-jest/presets/default-esm",
+  rootDir: "src",
+  transform: {},
+}
+
+export default config
 `;
 const tsConfigContent = common_tags_1.stripIndent `
 {
@@ -166,7 +177,9 @@ async function updatingPackageJson() {
     const path = path_1.join(process.cwd(), "package.json");
     const content = await readFile(path);
     const parsed = JSON.parse(content.toString());
-    const newParsed = Object.assign(Object.assign({}, parsed), { version: "0.1.0-alpha", main: "dist/index.js", scripts: {
+    const newParsed = Object.assign(Object.assign({}, parsed), { version: "0.1.0-alpha", exports: {
+            ".": "./dist/index.js"
+        }, main: "./dist/index.js", types: "./dist/index.d.ts", type: "module", scripts: {
             start: "node dist/index.js",
             "start-dev": "ts-node src/index.ts",
             test: "jest",

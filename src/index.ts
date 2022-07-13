@@ -27,12 +27,23 @@ const gitignoreContent = stripIndent`
 `
 
 const jestConfigContent = stripIndent`
-  module.exports = {
-    roots: ['<rootDir>/src'],
-    transform: {
-      '^.+\\.tsx?$': 'ts-jest',
+const config = {
+  verbose: true,
+  extensionsToTreatAsEsm: [".ts"],
+  globals: {
+    "ts-jest": {
+      useESM: true,
     },
-  }
+  },
+  moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1",
+  },
+  preset: "ts-jest/presets/default-esm",
+  rootDir: "src",
+  transform: {},
+}
+
+export default config
 `
 
 const tsConfigContent = stripIndent`
@@ -186,7 +197,12 @@ async function updatingPackageJson() {
   const newParsed = {
     ...parsed,
     version: "0.1.0-alpha",
-    main: "dist/index.js",
+    exports: {
+      ".": "./dist/index.js"
+    },
+    main: "./dist/index.js",
+    types: "./dist/index.d.ts",
+    type: "module",
     scripts: {
       start: "node dist/index.js",
       "start-dev": "ts-node src/index.ts",
