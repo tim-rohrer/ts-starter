@@ -48,7 +48,7 @@ export default config
 
 const tsConfigContent = stripIndent`
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "ts-node": {
     "esm": true
   },
@@ -151,7 +151,7 @@ async function run() {
       ts-jest \
       @types/node \
       @types/jest \
-      @tsconfig/node16 \
+      @tsconfig/node18 \
       @babel/core \
       @babel/plugin-proposal-class-properties \
       @babel/plugin-proposal-object-rest-spread \
@@ -198,7 +198,7 @@ async function updatingPackageJson() {
     ...parsed,
     version: "0.1.0-alpha",
     exports: {
-      ".": "./dist/index.js"
+      ".": "./dist/index.js",
     },
     main: "./dist/index.js",
     types: "./dist/index.d.ts",
